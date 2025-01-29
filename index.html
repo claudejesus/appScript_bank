@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transaction System</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+      }
+  
+      h1 {
+        color: #333;
+      }
+  
+      form {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+      }
+  
+      label {
+        font-size: 14px;
+        color: #555;
+        display: block;
+        margin-bottom: 5px;
+      }
+  
+      input[type="text"],
+      input[type="number"],
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 14px;
+      }
+  
+      button {
+        width: 100%;
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+  
+      button:hover {
+        background-color: #0056b3;
+      }
+  
+      #responseMessage {
+        font-size: 14px;
+        color: #008000;
+        margin-top: 10px;
+      }
+    </style>
+  </head>  
+</head>
+<body>
+
+  <form id="transactionForm">
+    <h1>Submit Transaction Data to Google Sheet</h1>
+    <label for="user">User:</label><br>
+    <input type="text" id="user" name="user" required><br><br>
+
+    <label for="transactionType">Transaction Type:</label><br>
+    <select id="transactionType" name="transactionType" required>
+      <option value="Deposit">Deposit</option>
+      <option value="Withdraw">Withdraw</option>
+    </select><br><br>
+
+    <label for="amount">Amount:</label><br>
+    <input type="number" id="amount" name="amount" required><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="responseMessage"></p>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyJWyrgUhl9pPxqbFMwv4Cd49cNbjCD84zPoYS8AOIiM2Y7Su36L9Vspu5PeLeXJO8/exec"; // Replace with your Web App URL
+
+    document.getElementById('transactionForm').addEventListener('submit', (e) => {
+      e.preventDefault(); // Prevent form submission
+
+      const formData = new FormData(e.target); // Collect form data
+      const responseMessage = document.getElementById('responseMessage');
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.text())
+        .then(data => {
+          responseMessage.textContent = data; // Display success or error message
+          e.target.reset(); // Clear the form
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          responseMessage.textContent = "An error occurred. Please try again.";
+        });
+    });
+  </script>
+  
+</body>
+</html>

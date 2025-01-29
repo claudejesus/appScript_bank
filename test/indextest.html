@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Transaction Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    form {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 100%;
+      max-width: 400px;
+      box-sizing: border-box;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #responseMessage {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <form id="transactionForm">
+    <h1>User Transaction Form</h1>
+
+    <label for="user">Select User:</label>
+    <select id="user" name="user" required>
+      <option value="" disabled selected>Select a user</option>
+      <option value="Kamali">Kamali</option>
+      <option value="Kalisa">Kalisa</option>
+      <option value="Kamana">Kamana</option>
+    </select>
+
+    <label for="transactionType">Transaction Type:</label>
+    <select id="transactionType" name="transactionType" required>
+      <option value="" disabled selected>Select transaction type</option>
+      <option value="deposit">Deposit</option>
+      <option value="withdraw">Withdraw</option>
+    </select>
+
+    <label for="amount">Amount (RWF):</label>
+    <input type="number" id="amount" name="amount" required>
+
+    <button type="submit">Submit</button>
+    <p id="responseMessage"></p>
+  </form>
+
+  <script>
+    const scriptURL = "https://script.google.com/macros/s/AKfycbwuWFr041-5zc75AfHaCtOJ_H7Ic9ENLN-uBGUlktsTIfDOaHlPLKxVx-MKITvRXY0/exec";
+
+    document.getElementById('transactionForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(e.target);
+      const responseMessage = document.getElementById('responseMessage');
+
+      fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+      })
+        .then(response => response.text())
+        .then(data => {
+          responseMessage.textContent = data;
+          e.target.reset();
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          responseMessage.textContent = "An error occurred. Please try again.";
+        });
+    });
+  </script>
+</body>
+</html>
